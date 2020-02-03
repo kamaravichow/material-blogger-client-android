@@ -32,7 +32,7 @@ public class ReadActivity extends AppCompatActivity {
     public static boolean onStartedSpeaking = false;
 
     ImageView mMainInage;
-    TextView mContent, mTitle;
+    TextView mContent, mTitle, mPublished;
     ImageView mShare, mSpeak, mBrowser;
     Speakerbox speakerbox;
 
@@ -48,6 +48,7 @@ public class ReadActivity extends AppCompatActivity {
         mShare = findViewById(R.id.share_read);
         mSpeak = findViewById(R.id.tts_read);
         mBrowser = findViewById(R.id.web_read);
+        mPublished = findViewById(R.id.published_read);
 
         speakerbox = new Speakerbox(getApplication());
         mBrowser.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +72,7 @@ public class ReadActivity extends AppCompatActivity {
             }
         });
 
+        mPublished.setText("Published on : " + getIntent().getStringExtra("date"));
 
         mShare.setOnClickListener(new View.OnClickListener() {
             @Override

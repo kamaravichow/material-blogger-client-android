@@ -66,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         holder.postSource.setText(item.getAuthor().getDisplayName());
 
-        holder.postPublished.setText(item.getUpdated());
+        holder.postPublished.setText("Updated on " + item.getUpdated());
         holder.postCount.setText(Integer.toString(position + 1) + ".");
 
         holder.postOptions.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 intent.putExtra("content", item.getContent());
                 intent.putExtra("img", elements.get(0).attr("src"));
                 intent.putExtra("title",item.getTitle());
+                intent.putExtra("date", item.getPublished());
                 intent.putExtra("url", item.getUrl());
                 context.startActivity(intent);
             }
