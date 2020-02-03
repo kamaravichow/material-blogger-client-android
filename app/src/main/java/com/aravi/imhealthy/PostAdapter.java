@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         Document document = Jsoup.parse(item.getContent());
 
-        Elements elements = document.select("img");
+        final Elements elements = document.select("img");
 
         if (!elements.get(0).attr("src").isEmpty()){
             holder.postImage.setVisibility(View.VISIBLE);
@@ -65,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.postSource.setText(item.getAuthor().getDisplayName());
 
         holder.postPublished.setText(item.getUpdated());
-        holder.postCount.setText(Integer.toString(position + 1));
+        holder.postCount.setText(Integer.toString(position + 1) + ".");
 
         holder.postOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,18 +95,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             }
         });
 
-        /*
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.ItemTrigger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainActivity.class);
+                Intent intent = new Intent(context, ReadActivity.class);
                 intent.putExtra("url", item.getUrl());
+                intent.putExtra("img", elements.get(0).attr("src"));
+
                 context.startActivity(intent);
             }
         });
 
-        */
+
 
     }
 
@@ -121,6 +123,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         TextView postCount;
         TextView postPublished;
         ImageView postOptions;
+        RelativeLayout ItemTrigger;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -130,6 +133,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             postCount = itemView.findViewById(R.id.tv_postCount);
             postPublished = itemView.findViewById(R.id.tv_published_date);
             postOptions = itemView.findViewById(R.id.postOptions);
+            ItemTrigger = itemView.findViewById(R.id.main_item_trigger);
         }
     }
 }

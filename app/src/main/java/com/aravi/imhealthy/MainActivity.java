@@ -1,5 +1,6 @@
 package com.aravi.imhealthy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aravi.imhealthy.Account.AccountActivity;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
@@ -24,20 +26,16 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-
     RecyclerView recyclerView;
     ProgressBar progressBar;
     Toolbar mTitleBar;
     ShimmerFrameLayout mLoadLayout;
-
     LinearLayoutManager manager;
     PostAdapter adapter;
     List<Item> items = new ArrayList<>();
-
     Boolean isScrolling = false;
     int currentItems, totalItems, scrollOutItems;
     String token = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_challenge:
+                Intent i = new Intent(MainActivity.this, AccountActivity.class);
+                startActivity(i);
                 break;
             case R.id.main_notifications:
                 break;
