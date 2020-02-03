@@ -5,13 +5,23 @@
     <item
         android:id="@+id/main_challenge"
         android:title="Account"
+        android:visible="false"
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:iconTint="@android:color/darker_gray"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/main_notifications"
+        android:id="@+id/main_settings"
         android:title="Settings"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/main_privacy"
+        android:title="Privacy Policy"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/main_feedback"
+        android:title="Feedback"
+        app:showAsAction="never"/>
 </menu>

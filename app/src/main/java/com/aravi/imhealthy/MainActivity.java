@@ -161,7 +161,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, AccountActivity.class);
                 startActivity(i);
                 break;
-            case R.id.main_notifications:
+            case R.id.main_settings:
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(i);
+                break;
+
+            case R.id.main_privacy:
+                break;
+
+            case R.id.main_feedback:
                 break;
             default:
                 break;
