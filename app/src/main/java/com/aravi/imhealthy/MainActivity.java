@@ -1,19 +1,25 @@
 package com.aravi.imhealthy;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +27,7 @@ import com.aravi.imhealthy.Account.AccountActivity;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     PostAdapter adapter;
     List<Item> items = new ArrayList<>();
     Boolean isScrolling = false;
+    RelativeLayout mMainLayout;
     int currentItems, totalItems, scrollOutItems;
     String token = "";
 
@@ -48,12 +56,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         progressBar = findViewById(R.id.progressLoader);
         mLoadLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.postList);
         mTitleBar = findViewById(R.id.titlebar);
+        mMainLayout = findViewById(R.id.main_layout);
+
         setSupportActionBar(mTitleBar);
 
+        Drawable drawable = getResources().getDrawable(R.drawable.icon_transp);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        Drawable finalDrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 70, 70, true));
+        mTitleBar.setLogo(finalDrawable);
 
         mLoadLayout.startShimmer();
 
@@ -110,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"e" + e, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "e" + e, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -162,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.main_settings:
-                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(i);
+                Intent s = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(s);
                 break;
 
             case R.id.main_privacy:
@@ -175,5 +190,30 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (!doubleBackToExitPressedOnce) {
+            this.doubleBackToExitPressedOnce = true;
+            Snackbar.make(mMainLayout, "Do you really want to exit?", Snackbar.LENGTH_LONG)
+                    .setAction("YES EXIT", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            System.exit(0);
+                        }
+                    })
+                    .setActionTextColor(Color.WHITE)
+                    .show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        }
     }
 }

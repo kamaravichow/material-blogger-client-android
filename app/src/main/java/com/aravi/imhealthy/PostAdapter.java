@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         //int POSITION = position;
 
 
-        String dpUrl = item.getAuthor().getImage().getUrl();
+        String Url = item.getUrl();
 
         holder.postSource.setText(item.getAuthor().getDisplayName());
 
@@ -80,13 +81,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 builder.setItems(reports, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            ShareApp();
+                        }
+
                         if (which == 1) {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl())));
+
                         }
 
                         if (which == 2) {
-                        }
 
-                        if (which == 3) {
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("text/html");
+                            intent.putExtra(Intent.EXTRA_EMAIL, "ask.aravindchowdary@gmail.com");
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "Report :" + item.getTitle());
+                            intent.putExtra(Intent.EXTRA_TEXT, "The content is ....  send email to ask.aravindchowdary@gmail.com ");
+
+                            context.startActivity(Intent.createChooser(intent, "Send Email"));
                         }
 
                     }
@@ -103,6 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 intent.putExtra("content", item.getContent());
                 intent.putExtra("img", elements.get(0).attr("src"));
                 intent.putExtra("title",item.getTitle());
+                intent.putExtra("url", item.getUrl());
                 context.startActivity(intent);
             }
         });
@@ -135,5 +148,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             postOptions = itemView.findViewById(R.id.postOptions);
             ItemTrigger = itemView.findViewById(R.id.main_item_trigger);
         }
+    }
+
+
+    private void ShareApp(){
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Hey ! I just found an awesome article on I'm healthy app click the link to download now : https://imhealthy.page.link/main";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share Article");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 }
