@@ -100,9 +100,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReadActivity.class);
-                intent.putExtra("url", item.getUrl());
+                intent.putExtra("content", item.getContent());
                 intent.putExtra("img", elements.get(0).attr("src"));
-
+                intent.putExtra("title",item.getTitle());
                 context.startActivity(intent);
             }
         });
