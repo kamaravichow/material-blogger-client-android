@@ -5,31 +5,37 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aravi.imhealthy.Account.AccountActivity;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdIconView;
+import com.facebook.ads.AdOptionsView;
+import com.facebook.ads.AudienceNetworkAds;
+import com.facebook.ads.NativeAdLayout;
+import com.facebook.ads.NativeAdListener;
+import com.facebook.ads.NativeBannerAd;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,10 +58,19 @@ public class MainActivity extends AppCompatActivity {
     int currentItems, totalItems, scrollOutItems;
     String token = "";
 
+
+    private final String TAG = MainActivity.class.getSimpleName();
+    private NativeBannerAd nativeBannerAd;
+    private NativeAdLayout nativeAdLayout;
+    private LinearLayout adView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AudienceNetworkAds.initialize(this);
+
 
         progressBar = findViewById(R.id.progressLoader);
         mLoadLayout = findViewById(R.id.shimmer_view_container);
@@ -102,32 +117,46 @@ public class MainActivity extends AppCompatActivity {
         getData();
 
 
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
+        nativeBannerAd = new NativeBannerAd(this, "198827961258971_198839641257803");
+        nativeBannerAd.setAdListener(new NativeAdListener() {
+            @Override
+            public void onMediaDownloaded(Ad ad) {
+                // Native ad finished downloading all assets
+                Log.e(TAG, "Native ad finished downloading all assets.");
+            }
 
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                // Native ad failed to load
+                Log.e(TAG, "Native ad failed to load: " + adError.getErrorMessage());
+            }
 
-                        // Handle the deep link. For example, open the linked
-                        // content, or apply promotional credit to the user's
-                        // account.
-                        // ...
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Native ad is loaded and ready to be displayed
+                Log.d(TAG, "Native ad is loaded and ready to be displayed!");
+                // Race condition, load() called again before last ad was displayed
+                if (nativeBannerAd == null || nativeBannerAd != ad) {
+                    return;
+                }
+                // Inflate Native Banner Ad into Container
+                inflateAd(nativeBannerAd);
+            }
 
-                        // ...
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "e" + e, Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Native ad clicked
+                Log.d(TAG, "Native ad clicked!");
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                // Native ad impression
+                Log.d(TAG, "Native ad impression logged!");
+            }
+        });
+        // load the ad
+        //nativeBannerAd.loadAd();
 
 
     }
@@ -190,6 +219,68 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+
+    private void inflateAd(NativeBannerAd nativeBannerAd) {
+        // Unregister last ad
+        nativeBannerAd.unregisterView();
+
+        // Add the Ad view into the ad container.
+        nativeAdLayout = findViewById(R.id.native_banner_ad_container);
+        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        // Inflate the Ad view.  The layout referenced is the one you created in the last step.
+        adView = (LinearLayout) inflater.inflate(R.layout.native_banner_ad_unit, nativeAdLayout, false);
+        nativeAdLayout.addView(adView);
+
+        // Add the AdChoices icon
+        RelativeLayout adChoicesContainer = adView.findViewById(R.id.ad_choices_container);
+        AdOptionsView adOptionsView = new AdOptionsView(MainActivity.this, nativeBannerAd, nativeAdLayout);
+        adChoicesContainer.removeAllViews();
+        adChoicesContainer.addView(adOptionsView, 0);
+
+        // Create native UI using the ad metadata.
+        TextView nativeAdTitle = adView.findViewById(R.id.native_ad_title);
+        TextView nativeAdSocialContext = adView.findViewById(R.id.native_ad_social_context);
+        TextView sponsoredLabel = adView.findViewById(R.id.native_ad_sponsored_label);
+        AdIconView nativeAdIconView = adView.findViewById(R.id.native_icon_view);
+        Button nativeAdCallToAction = adView.findViewById(R.id.native_ad_call_to_action);
+
+        // Set the Text.
+        nativeAdCallToAction.setText(nativeBannerAd.getAdCallToAction());
+        nativeAdCallToAction.setVisibility(
+                nativeBannerAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
+        nativeAdTitle.setText(nativeBannerAd.getAdvertiserName());
+        nativeAdSocialContext.setText(nativeBannerAd.getAdSocialContext());
+        sponsoredLabel.setText(nativeBannerAd.getSponsoredTranslation());
+
+        // Register the Title and CTA button to listen for clicks.
+        List<View> clickableViews = new ArrayList<>();
+        clickableViews.add(nativeAdTitle);
+        clickableViews.add(nativeAdCallToAction);
+        nativeBannerAd.registerViewForInteraction(adView, nativeAdIconView, clickableViews);
+    }
+
+
+    private void showAdWithDelay() {
+        /**
+         * Here is an example for displaying the ad with delay;
+         * Please do not copy the Handler into your project
+         */
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // Check if nativeBannerAd has been loaded successfully
+                if (nativeBannerAd == null || !nativeBannerAd.isAdLoaded()) {
+                    return;
+                }
+                // Check if ad is already expired or invalidated, and do not show ad if that is the case. You will not get paid to show an invalidated ad.
+                if (nativeBannerAd.isAdInvalidated()) {
+                    return;
+                }
+                inflateAd(nativeBannerAd); // Inflate Native Banner Ad into Container same as previous code example
+            }
+        }, 1000 * 60 * 15); // Show the ad after 15 minutes
     }
 
 

@@ -15,6 +15,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@android:color/white">
 
 
@@ -39,6 +41,7 @@
             <TextView
                 android:id="@+id/title_read"
                 android:layout_width="wrap_content"
+                android:textColor="@android:color/black"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ui_icon_read"
                 android:layout_centerHorizontal="true"
@@ -62,9 +65,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="60dp"
                 android:layout_height="1dp"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/ui_divider_read"
@@ -72,14 +75,46 @@
                 android:background="#DDDDDD"/>
 
 
+            <com.facebook.ads.NativeAdLayout
+                android:id="@+id/native_ad_container"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_below="@id/ui_divider_read"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ui_divider_read"
+                android:layout_below="@+id/native_ad_container"
                 android:layout_margin="20dp"
                 android:text="Content"
+                android:textColor="@android:color/black"
                 android:id="@+id/content_read"
                 android:textSize="18sp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_read"
+                android:text=" - Comments"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/nunito_bold"
+                android:id="@+id/comment_count"
+                android:layout_margin="10dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:text="Add a Comment"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/content_read"
+                android:layout_alignParentRight="true"
+                android:layout_margin="8dp"
+                android:id="@+id/addcommentbtn"/>
 
 
         </RelativeLayout>

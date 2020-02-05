@@ -92,13 +92,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
                         if (which == 2) {
 
-                            Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setType("text/html");
+                            Intent intent = new Intent(Intent.ACTION_SENDTO);
+                            intent.setType("text/plain");
                             intent.putExtra(Intent.EXTRA_EMAIL, "ask.aravindchowdary@gmail.com");
                             intent.putExtra(Intent.EXTRA_SUBJECT, "Report :" + item.getTitle());
-                            intent.putExtra(Intent.EXTRA_TEXT, "The content is ....  send email to ask.aravindchowdary@gmail.com ");
+                            intent.putExtra(Intent.EXTRA_TEXT, "The content is ....  ");
 
-                            context.startActivity(Intent.createChooser(intent, "Send Email"));
+                            context.startActivity(Intent.createChooser(intent, "Report Post "));
                         }
 
                     }
@@ -112,11 +112,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ReadActivity.class);
-                intent.putExtra("content", item.getContent());
                 intent.putExtra("img", elements.get(0).attr("src"));
                 intent.putExtra("title",item.getTitle());
+                intent.putExtra("content", item.getContent());
                 intent.putExtra("date", item.getPublished());
                 intent.putExtra("url", item.getUrl());
+                intent.putExtra("comments", item.getReplies().getTotalItems());
+                intent.putExtra("comments_selflink", item.getReplies().getSelfLink());
                 context.startActivity(intent);
             }
         });

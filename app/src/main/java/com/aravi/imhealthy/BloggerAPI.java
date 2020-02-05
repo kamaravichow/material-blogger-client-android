@@ -9,7 +9,7 @@ import retrofit2.http.Url;
 public class BloggerAPI {
 
     public static final String key = "AIzaSyCypyP7EqANMWIoEZORQna43IUfcw3Bge4";
-    public static final String url = "https://www.googleapis.com/blogger/v3/blogs/7293562182615085581/posts/";
+    public static final String url = "https://www.googleapis.com/blogger/v3/blogs/1539518448229991210/posts/";
 
     public static PostService postService = null;
 
