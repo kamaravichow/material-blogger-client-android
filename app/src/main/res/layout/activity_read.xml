@@ -48,7 +48,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="center"
-                android:text="TITLE APPEARS HERE..."
+                android:text="........"
                 android:textSize="24sp" />
 
 
@@ -75,21 +75,21 @@
                 android:background="#DDDDDD"/>
 
 
-            <com.facebook.ads.NativeAdLayout
-                android:id="@+id/native_ad_container"
+            <FrameLayout
+                android:id="@+id/fl_adplaceholder"
                 android:layout_width="match_parent"
-                android:layout_margin="10dp"
-                android:layout_below="@id/ui_divider_read"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_below="@+id/ui_divider_read"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/native_ad_container"
+                android:layout_below="@+id/fl_adplaceholder"
                 android:layout_margin="20dp"
-                android:text="Content"
+                android:text="......."
                 android:textColor="@android:color/black"
                 android:id="@+id/content_read"
                 android:textSize="18sp"/>
@@ -109,13 +109,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:text="Add a Comment"
+                android:text="@string/add_a_comment"
                 android:layout_marginBottom="20dp"
                 android:layout_below="@+id/content_read"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
                 android:id="@+id/addcommentbtn"/>
 
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/addcommentbtn"/>
 
         </RelativeLayout>
 
@@ -125,7 +131,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:background="@android:color/white"
         android:elevation="5dp"
         android:gravity="right"
@@ -134,8 +140,8 @@
 
         <ImageView
             android:id="@+id/tts_read"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginRight="20dp"
             android:tint="@android:color/darker_gray"
             android:src="@drawable/ic_volume_up_black_24dp"
@@ -143,8 +149,8 @@
 
         <ImageView
             android:id="@+id/web_read"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginRight="20dp"
             android:tint="@android:color/darker_gray"
             android:src="@drawable/ic_web_black_24dp"
@@ -152,8 +158,8 @@
 
         <ImageView
             android:id="@+id/share_read"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginRight="20dp"
             android:tint="@android:color/darker_gray"
             android:src="@drawable/ic_share_black_24dp"
@@ -161,8 +167,8 @@
 
         <ImageView
             android:id="@+id/more_read"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginRight="20dp"
             android:tint="@android:color/darker_gray"
             android:src="@drawable/ic_more_vert_black_24dp"

@@ -12,7 +12,7 @@
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="  I'm Healthy"
+        app:title="@string/app_name"
         app:menu="@menu/main_toolbar">
 
     </androidx.appcompat.widget.Toolbar>
@@ -61,15 +61,33 @@
             </androidx.recyclerview.widget.RecyclerView>
 
 
+            <LinearLayout
+                android:id="@+id/ad_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/white_round"
+                android:backgroundTint="@color/banner_background"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/adView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    ads:adSize="BANNER"
+                    ads:adUnitId="@string/banner">
+                    <!--ads:adUnitId="ca-app-pub-3940256099942544/6300978111,// ca-app-pub-3604457906725221/6278217052 "-->
+                </com.google.android.gms.ads.AdView>
+
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
-        <com.facebook.ads.NativeAdLayout
-            android:layout_gravity="bottom"
-            android:id="@+id/native_banner_ad_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+
     </FrameLayout>
 
 

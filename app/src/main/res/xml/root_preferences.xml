@@ -20,7 +20,7 @@
             app:summary="Your feedback helps me improve your exprience."/>
 
         <Preference
-            app:key="attachment"
+            app:key="contact"
             app:title="Contact Developer"
             app:summary="Drop an email, I'm looking forward to hear from you."/>
 
